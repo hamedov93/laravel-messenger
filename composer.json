@@ -2,6 +2,7 @@
     "name": "hamedov/laravel-messenger",
     "description": "Laravel messaging package",
     "type": "library",
+    "license": "MIT",
     "authors": [
         {
             "name": "Mohamed Hamed",
