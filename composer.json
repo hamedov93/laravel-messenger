@@ -1,0 +1,25 @@
+{
+    "name": "hamedov/laravel-messenger",
+    "description": "Laravel messaging package",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Mohamed Hamed",
+            "email": "m.hamed@nezam.io"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Hamedov\\Messenger\\MessengerServiceProvider"
+            ]
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Hamedov\\Messenger\\": "src/"
+        }
+    }
+}
