@@ -15,13 +15,8 @@ class Message extends Model
     	return $this->belongsTo(Conversation::class);
     }
 
-    public function sender()
+    public function participant()
     {
-        return $this->morphTo();
-    }
-
-    public function recepient()
-    {
-    	return $this->morphTo();
+        return $this->belongsTo(Participant::class);
     }
 }

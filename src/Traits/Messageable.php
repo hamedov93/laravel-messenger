@@ -7,6 +7,7 @@ use Hamedov\Messenger\Models\Conversation;
 use Hamedov\Messenger\Models\Participant;
 use Hamedov\Messenger\Models\Message;
 
+
 Trait Messageable {
 
 	public function conversations()
@@ -49,7 +50,7 @@ Trait Messageable {
 		])->when($related instanceof Model, function($query) use ($related) {
 			// Get the conversation related to this specific model
 			$query->where('conversations.relatable_id', $related->id);
-			$query->where('conversations.relatable_type', get_class($related));
+			$query->where('conversations.relatable_type', $related->getMorphClass());
 		})->when( ! $related instanceof Model, function($query) use ($related) {
 			// Get the direct conversation between the two parties
 			// Not related to any models
@@ -58,8 +59,11 @@ Trait Messageable {
 		})->join('participants AS p2', function($join) use ($other_party) {
 			$join->on('p2.conversation_id', '=', 'conversations.id');
 			$join->where('p2.messageable_id', '=', $other_party->id);
-			$join->where('p2.messageable_type', '=', get_class($other_party));
+			$join->where('p2.messageable_type', '=', $other_party->getMorphClass());
 		})->first();
+
+		// var_dump($conversation);
+		// die();
 
 		return $conversation;
 	}
@@ -69,20 +73,19 @@ Trait Messageable {
 		$conversation = Conversation::create([
 			'name' => null,
 			'relatable_id' => $related ? $related->id : null,
-			'relatable_type' => $related ? get_class($related) : null,
+			'relatable_type' => $related ? $related->getMorphClass() : null,
 		]);
 
 		$conversation->participants()->saveMany([
 			new Participant([
 				'messageable_id' => $this->id,
-				'messageable_type' => get_class($this),
+				'messageable_type' => $this->getMorphClass(),
 				'is_admin' => '1',
 				'status' => 'active',
-				'last_read_message_id' => null,
 			]),
 			new Participant([
 				'messageable_id' => $recepient->id,
-				'messageable_type' => get_class($recepient),
+				'messageable_type' => $recepient->getMorphClass(),
 			]),
 		]);
 

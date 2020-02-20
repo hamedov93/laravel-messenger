@@ -30,6 +30,15 @@ class Conversation extends Model
     }
 
     /**
+     * Get conversation latest message
+     * @return [type] [description]
+     */
+    public function lastMessage()
+    {
+        return $this->hasOne(Message::class)->latest();
+    }
+
+    /**
      * Get conversation participant entries in participants table
      * And not the actual participant models.
      * This is used along with messageable relationship in
@@ -72,7 +81,7 @@ class Conversation extends Model
     {
         return $this->participants()->where([
             'messageable_id' => $model->id,
-            'messageable_type' => get_class($model),
+            'messageable_type' => $model->getMorphClass(),
         ])->first();
     }
     
@@ -83,7 +92,7 @@ class Conversation extends Model
     {
         return $this->participants()->firstOrCreate([
             'messageable_id' => $model->id,
-            'messageable_type' => get_class($model),
+            'messageable_type' => $model->getMorphClass(),
             'is_admin' => $is_admin ? '1' : '0',
         ]);
     }
@@ -95,7 +104,7 @@ class Conversation extends Model
     {
         return (int) $this->participants()->where([
             'messageable_id' => $model->id,
-            'messageable_type' => get_class($model),
+            'messageable_type' => $model->getMorphClass(),
         ])->count() > 0;
     }
 }

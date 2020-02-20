@@ -19,7 +19,7 @@ class CreateParticipantsTable extends Migration
             $table->morphs('messageable');
             $table->enum('is_admin', ['0', '1'])->default('0');
             $table->enum('status', ['active', 'blocked', 'removed'])->default('active');
-            $table->unsignedBigInteger('last_read_message_id')->nullable()->default(null);
+            $table->timestamp('last_read')->useCurrent();
             $table->timestamps();
         });
     }
