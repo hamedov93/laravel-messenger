@@ -10,7 +10,11 @@
         }
     ],
     "minimum-stability": "dev",
-    "require": {},
+    "require": {
+        "php": "^7.2.5",
+        "illuminate/database": "^7.0",
+        "illuminate/support": "^7.0"
+    },
     "extra": {
         "laravel": {
             "providers": [
