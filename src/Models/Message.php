@@ -19,4 +19,10 @@ class Message extends Model
     {
         return $this->belongsTo(Participant::class);
     }
+
+    public function recepients()
+    {
+        return $this->hasMany(Participant::class, 'conversation_id', 'conversation_id')
+            ->where('participants.id', '!=', $this->participant_id);
+    }
 }

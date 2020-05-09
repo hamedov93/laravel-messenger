@@ -28,7 +28,8 @@ class Participant extends Model
 
     /**
      * Add new message to conversation
-     * @return [type] [description]
+     * 
+     * @return \Hamedov\Messenger\Models\Message
      */
     public function newMessage($message)
     {
