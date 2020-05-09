@@ -13,6 +13,10 @@ class Participant extends Model
         'is_admin', 'status', 'last_read',
     ];
 
+    protected $dates = [
+        'last_read',
+    ];
+
     public function conversation()
     {
     	return $this->belongsTo(Conversation::class);
