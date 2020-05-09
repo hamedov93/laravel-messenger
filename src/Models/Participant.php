@@ -3,6 +3,8 @@
 namespace Hamedov\Messenger\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Lang;
 
 class Participant extends Model
 {
@@ -33,10 +35,48 @@ class Participant extends Model
      */
     public function newMessage($message)
     {
-        return $this->messages()->create([
+        $text = $this->getMessageText($message);
+        $msg = $this->messages()->create([
             'conversation_id' => $this->conversation_id,
-            'message' => $message,
+            'message' => $text,
             'read_by' => '{}',
         ]);
+
+        return $this->addMessageMedia($msg, $message);
+    }
+
+    public function getMessageText($message)
+    {
+        if ($message instanceof UploadedFile)
+        {
+            return Lang::get('1 Photo');
+        }
+
+        if (is_array($message))
+        {
+            return count($message) . ' ' . Lang::get('Photos');
+        }
+
+        return $message;
+    }
+
+    public function addMessageMedia($message, $files)
+    {
+        if ($files instanceof UploadedFile)
+        {
+            $files = [$files];
+        }
+
+        if ( ! is_array($files))
+        {
+            return $message;
+        }
+
+        foreach ($files as $file)
+        {
+            $message->addMedia($file)->toMediaCollection(config('messaging.images_collection'));
+        }
+
+        return $message;
     }
 }

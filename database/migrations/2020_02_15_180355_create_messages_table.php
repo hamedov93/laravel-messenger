@@ -19,6 +19,7 @@ class CreateMessagesTable extends Migration
             $table->unsignedBigInteger('participant_id');
             $table->text('message')->nullable();
             $table->text('read_by')->nullable();
+            $table->string('type', 100)->nullable();
             $table->timestamps();
         });
     }

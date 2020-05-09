@@ -13,7 +13,7 @@ class MessengerServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->mergeConfigFrom(__DIR__.'/../config/messaging.php', 'messaging');
     }
 
     /**
@@ -24,5 +24,9 @@ class MessengerServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+
+        $this->publishes([
+            __DIR__.'/../config/messaging.php' => config_path('messaging.php'),
+        ], 'config');
     }
 }
