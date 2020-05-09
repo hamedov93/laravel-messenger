@@ -37,12 +37,14 @@ class Participant extends Model
      * 
      * @return \Hamedov\Messenger\Models\Message
      */
-    public function newMessage($message)
+    public function newMessage($message, $type = null)
     {
         $text = $this->getMessageText($message);
+        $type = $type ?? $this->getMessageType($message);
         $msg = $this->messages()->create([
             'conversation_id' => $this->conversation_id,
             'message' => $text,
+            'type' => $type,
             'read_by' => '{}',
         ]);
 
@@ -53,7 +55,7 @@ class Participant extends Model
     {
         if ($message instanceof UploadedFile)
         {
-            return Lang::get('1 Photo');
+            return Lang::get('Photo');
         }
 
         if (is_array($message))
@@ -62,6 +64,13 @@ class Participant extends Model
         }
 
         return $message;
+    }
+
+    public function getMessageType($message)
+    {
+        return is_array($message) || $message instanceof UploadedFile
+            ? 'media'
+            : 'text';
     }
 
     public function addMessageMedia($message, $files)

@@ -15,7 +15,7 @@ Trait Messageable {
 		return $this->morphToMany(Conversation::class, 'messageable', 'participants', 'messageable_id', 'conversation_id');
 	}
 
-	public function sendMessageTo($recepient, $message, ?Model $related = null)
+	public function sendMessageTo($recepient, $message, ?Model $related = null, $type = null)
 	{
 		if ( ! $recepient instanceof Conversation &&
 				$recepient instanceof Model)
@@ -40,7 +40,7 @@ Trait Messageable {
 			}
 		}
 
-		return $conversation->newMessage($this, $message);
+		return $conversation->newMessage($this, $message, $type);
 	}
 
 	public function getConversation(Model $other_party, ?Model $related = null)

@@ -68,10 +68,10 @@ class Conversation extends Model
     /**
      * Add new message to a conversation
      */
-    public function newMessage(Model $sender, $message)
+    public function newMessage(Model $sender, $message, $type = null)
     {
         $participant = $this->getParticipant($sender);
-        return $participant->newMessage($message);
+        return $participant->newMessage($message, $type);
     }
 
     /**

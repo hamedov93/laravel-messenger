@@ -6,7 +6,7 @@ return [
 	'images_collection' => 'messages',
 
 	// Define conversions for images
-	'icon_conversions' => [
+	'image_conversions' => [
 		'thumb' => [300, 300], // Width, Height 
 	],
 ];
