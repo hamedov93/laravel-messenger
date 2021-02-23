@@ -3,30 +3,36 @@
 namespace Hamedov\Messenger\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Spatie\MediaLibrary\HasMedia\HasMedia;
-use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
+use Spatie\Image\Manipulations;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media as BaseMedia;
 
 class Message extends Model implements HasMedia
 {
-    use HasMediaTrait;
+    use InteractsWithMedia;
 
     protected $fillable = [
     	'conversation_id', 'participant_id', 'message',
         'read_by', 'type',
     ];
 
-    public function registerMediaCollections()
+    public function registerMediaCollections(): void
     {
-        $this->addMediaCollection(config('messaging.images_collection', 'messages'))
-            ->registerMediaConversions(function ($media) {
-                $conversions = config('messaging.image_conversions', ['thumb' => [300, 300]]);
-                foreach ($conversions as $key => $value)
-                {
-                    $this->addMediaConversion($key)
-                        ->width($value[0])
-                        ->height($value[1]);
-                }
-            });
+        $this->addMediaCollection(config('messaging.images_collection', 'messages'));
+    }
+
+    /**
+     * Register media conversions
+     * @return void
+     */
+    public function registerMediaConversions(BaseMedia $media = null): void
+    {
+        $conversions = config('messaging.image_conversions', ['thumbnail' => [300, 300]]);
+        foreach ($conversions as $key => $value) {
+            $this->addMediaConversion($key)
+                ->fit(Manipulations::FIT_MAX, $value[0], $value[1]);
+        }
     }
 
     public function conversation()
