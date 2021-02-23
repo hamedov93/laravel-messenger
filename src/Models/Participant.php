@@ -93,7 +93,7 @@ class Participant extends Model
         return $message;
     }
 
-    public function scopeMessageable($query, $messageable)
+    public function scopeByMessageable($query, $messageable)
     {
         $query->where('participants.messageable_id', $messageable->getKey());
         $query->where('participants.messageable_type', $messageable->getMorphClass());

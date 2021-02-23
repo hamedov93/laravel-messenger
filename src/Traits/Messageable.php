@@ -62,9 +62,6 @@ Trait Messageable {
 			$join->where('p2.messageable_type', '=', $other_party->getMorphClass());
 		})->first();
 
-		// var_dump($conversation);
-		// die();
-
 		return $conversation;
 	}
 
