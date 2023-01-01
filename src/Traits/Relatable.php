@@ -1,8 +1,8 @@
 <?php
 
 namespace Hamedov\Messenger\Traits;
-use Hamedov\Messenger\Models\Conversation;
 
+use Hamedov\Messenger\Models\Conversation;
 
 Trait Relatable {
 

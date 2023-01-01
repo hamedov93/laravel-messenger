@@ -17,25 +17,20 @@ Trait Messageable {
 
 	public function sendMessageTo($recepient, $message, ?Model $related = null, $type = null)
 	{
-		if ( ! $recepient instanceof Conversation &&
-				$recepient instanceof Model)
-		{
+		if (! $recepient instanceof Conversation &&
+				$recepient instanceof Model) {
 			$conversation = $this->getConversation($recepient, $related);
 
-			if ( ! $conversation)
-			{
+			if (! $conversation) {
 				// Create new conversation
 				$conversation = $this->newConversation($recepient, $related);
 			}
-		}
-		elseif ($recepient instanceof Conversation)
-		{
+		} elseif ($recepient instanceof Conversation) {
 			// Add message to conversation by any entity
 			// First check if this entity is a participant in this conversation
 			// If not add it to the conversation
 			$conversation = $recepient;
-			if ( ! $conversation->hasParticipant($this))
-			{
+			if (! $conversation->hasParticipant($this)) {
 				$this->joinConversation($conversation);
 			}
 		}
@@ -43,7 +38,7 @@ Trait Messageable {
 		return $conversation->newMessage($this, $message, $type);
 	}
 
-	public function getConversation(Model $other_party, ?Model $related = null)
+	public function getConversation(Model $otherParty, ?Model $related = null)
 	{
 		$conversation = $this->conversations()->select([
 			'conversations.*', 'p2.id AS other_participant_id'
@@ -51,15 +46,15 @@ Trait Messageable {
 			// Get the conversation related to this specific model
 			$query->where('conversations.relatable_id', $related->id);
 			$query->where('conversations.relatable_type', $related->getMorphClass());
-		})->when( ! $related instanceof Model, function($query) use ($related) {
+		})->when(! $related instanceof Model, function($query) use ($related) {
 			// Get the direct conversation between the two parties
 			// Not related to any models
 			$query->whereNull('conversations.relatable_id');
 			$query->whereNull('conversations.relatable_type');
-		})->join('participants AS p2', function($join) use ($other_party) {
+		})->join('participants AS p2', function($join) use ($otherParty) {
 			$join->on('p2.conversation_id', '=', 'conversations.id');
-			$join->where('p2.messageable_id', '=', $other_party->id);
-			$join->where('p2.messageable_type', '=', $other_party->getMorphClass());
+			$join->where('p2.messageable_id', '=', $otherParty->id);
+			$join->where('p2.messageable_type', '=', $otherParty->getMorphClass());
 		})->first();
 
 		// var_dump($conversation);
@@ -92,8 +87,8 @@ Trait Messageable {
 		return $conversation;
 	}
 
-	public function joinConversation(Conversation $conversation, $as_admin = false)
+	public function joinConversation(Conversation $conversation, $asAdmin = false)
 	{
-		$conversation->addParticipant($this, $as_admin);
+		$conversation->addParticipant($this, $asAdmin);
 	}
 }

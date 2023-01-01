@@ -55,14 +55,14 @@ class Conversation extends Model
      * Get conversation participants/messageables of one type directly
      * This is the problem we have solved using the previous method
      */
-    public function messageables($messageable_model = 'App\User')
+    public function messageables($messageableModel = 'App\Models\User')
     {
-        if ( ! class_exists($messageable_model))
+        if ( ! class_exists($messageableModel))
         {
             return null;
         }
 
-        return $this->morphedByMany($messageable_model, 'messageable', 'participants', 'conversation_id', 'messageable_id');
+        return $this->morphedByMany($messageableModel, 'messageable', 'participants', 'conversation_id', 'messageable_id');
     }
 
     /**
@@ -88,12 +88,12 @@ class Conversation extends Model
     /**
      * Add new participant to conversation
      */
-    public function addParticipant(Model $model, $is_admin = false)
+    public function addParticipant(Model $model, $isAdmin = false)
     {
         return $this->participants()->firstOrCreate([
             'messageable_id' => $model->id,
             'messageable_type' => $model->getMorphClass(),
-            'is_admin' => $is_admin ? '1' : '0',
+            'is_admin' => $isAdmin ? '1' : '0',
         ]);
     }
 

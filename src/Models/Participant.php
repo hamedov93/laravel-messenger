@@ -53,13 +53,11 @@ class Participant extends Model
 
     public function getMessageText($message)
     {
-        if ($message instanceof UploadedFile)
-        {
+        if ($message instanceof UploadedFile) {
             return Lang::get('Photo');
         }
 
-        if (is_array($message))
-        {
+        if (is_array($message)) {
             return count($message) . ' ' . Lang::get('Photos');
         }
 
@@ -75,18 +73,15 @@ class Participant extends Model
 
     public function addMessageMedia($message, $files)
     {
-        if ($files instanceof UploadedFile)
-        {
+        if ($files instanceof UploadedFile) {
             $files = [$files];
         }
 
-        if ( ! is_array($files))
-        {
+        if ( ! is_array($files)) {
             return $message;
         }
 
-        foreach ($files as $file)
-        {
+        foreach ($files as $file) {
             $message->addMedia($file)->toMediaCollection(config('messaging.images_collection'));
         }
 
